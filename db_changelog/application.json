@@ -1,0 +1,179 @@
+{
+    "databaseChangeLog": [
+        {
+            "changeSet": {
+                "id": "create_schema_application",
+                "author": "ankitam",
+                "changes": [
+                    {
+                        "sql": {
+                            "sql": "CREATE SCHEMA application"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "changeSet": {
+                "id": "create_application_permissions",
+                "author": "ankitam",
+                "changes": [
+                    {
+                        "sqlFile": {
+                            "splitStatements": true,
+                            "path": "changelog/application_schema_permissions.sql",
+                            "stripComments": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "changeSet": {
+                "id": "create_table_applications",
+                "author": "ankitam",
+                "changes": [
+                    {
+                        "createTable": {
+                            "columns": [
+                                {
+                                    "column": {
+                                        "name": "id",
+                                        "type": "UUID",
+                                        "defaultValueComputed": "uuid_generate_v4()",
+                                        "constraints":{
+                                            "primaryKey":true
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "display_name",
+                                        "type": "varchar(255)",
+                                        "constraints": {
+                                            "nullable": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "short_code",
+                                        "type": "varchar(255)",
+                                        "constraints": {
+                                            "nullable": false,
+                                            "primaryKey":true
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "description",
+                                        "type": "varchar(255)"
+                                        
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "domain",
+                                        "type": "varchar(255)"
+                                       
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "account_id",
+                                        "type": "UUID",
+                                        "constraints": {
+                                            "nullable": false,
+                                            "foreignKeyName":"fk_account_id" ,
+                                            "references": "account.accounts(id)"
+                                            
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "icon_uri",
+                                        "type": "varchar(255)"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "is_site",
+                                        "type": "boolean",
+                                        "defaultValueBoolean": "false"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "is_fleet",
+                                        "type": "boolean",
+                                        "defaultValueBoolean": "false"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "is_super_asset",
+                                        "type": "boolean",
+                                        "defaultValueBoolean": "false"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "created_by",
+                                        "type": "varchar(255)",
+                                        "defaultValueComputed": "current_user",
+                                        "constraints": {
+                                            "nullable": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "updated_by",
+                                        "type": "varchar(255)",
+                                        "defaultValueComputed": "current_user",
+                                        "constraints": {
+                                            "nullable": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "created_at",
+                                        "type": "TIMESTAMP WITHOUT TIME ZONE",
+                                        "defaultValueComputed": "current_timestamp"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "updated_at",
+                                        "type": "TIMESTAMP WITHOUT TIME ZONE",
+                                        "defaultValueComputed": "current_timestamp"
+                                    }
+                                }
+                            ],
+                            "schemaName": "application",
+                            "tableName": "applications"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "changeSet": {
+                "id": "insert_master_applications",
+                "author": "ngoswami",
+                "changes": [
+                    {
+                        "sqlFile": {
+                            "splitStatements": true,
+                            "path": "changelog/insert_master_applications.sql",
+                            "stripComments": true
+                        }
+                    }
+                ]
+            }
+        }        
+    ]
+}

@@ -1,0 +1,298 @@
+{
+    "databaseChangeLog": [
+      {
+        "changeSet": {
+          "id": "create_schema_rbac",
+          "author": "ankitam",
+          "changes": [
+            {
+              "sql": {
+                "sql": "CREATE SCHEMA rbac"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "changeSet": {
+            "id": "create_rbac_permissions",
+            "author": "ankitam",
+            "changes": [
+                {
+                    "sqlFile": {
+                        "splitStatements": true,
+                        "path": "changelog/rbac_schema_permissions.sql",
+                        "stripComments": true
+                    }
+                }
+            ]
+        }
+      },
+      {
+        "changeSet": {
+          "id": "create_table_roles",
+          "author": "ankitam",
+          "changes": [
+            {
+              "createTable": {
+                "columns": [
+                  {
+                    "column": {
+                      "name": "id",
+                      "type": "UUID",
+                      "defaultValueComputed": "uuid_generate_v4()",
+                      "constraints":{
+                        "primaryKey":true
+                    }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "name",
+                      "type": "varchar(255)",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "short_code",
+                      "type": "varchar(255)",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  
+                  {
+                    "column": {
+                      "name": "created_by",
+                      "type": "varchar(255)",
+                      "defaultValueComputed": "current_user",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "updated_by",
+                      "type": "varchar(255)",
+                      "defaultValueComputed": "current_user",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "created_at",
+                      "type": "TIMESTAMP WITHOUT TIME ZONE",
+                      "defaultValueComputed":"current_timestamp"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "updated_at",
+                      "type": "TIMESTAMP WITHOUT TIME ZONE",
+                      "defaultValueComputed":"current_timestamp"
+                    }
+                  }
+                ],
+                "schemaName": "rbac",
+                "tableName": "roles"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "changeSet": {
+          "id": "create_table_policies",
+          "author": "ankitam",
+          "changes": [
+            {
+              "createTable": {
+                "columns": [
+                  {
+                    "column": {
+                      "name": "id",
+                      "type": "UUID",
+                      "defaultValueComputed": "uuid_generate_v4()",
+                      "constraints":{
+                        "nullable":false,
+                        "primaryKey":true
+                      }
+                     
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "name",
+                      "type": "varchar(255)",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "claim",
+                      "type": "varchar(255)"
+                      
+                    }
+                  },
+                  
+                  {
+                    "column": {
+                      "name": "created_by",
+                      "type": "varchar(255)",
+                      "defaultValueComputed": "current_user",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "updated_by",
+                      "type": "varchar(255)",
+                      "defaultValueComputed": "current_user",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "created_at",
+                      "type": "TIMESTAMP WITHOUT TIME ZONE",
+                      "defaultValueComputed":"current_timestamp"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "updated_at",
+                      "type": "TIMESTAMP WITHOUT TIME ZONE",
+                      "defaultValueComputed":"current_timestamp"
+                    }
+                  }
+                ],
+                "schemaName": "rbac",
+                "tableName": "policies"
+              }
+            }
+           
+          ],
+          "rollback":{
+            "dropTable":{
+                "tableName": "rbac.policies"
+            }
+           }
+        }
+      },
+      {
+        "changeSet": {
+          "id": "create_table_role_policies",
+          "author": "ankitam",
+          "changes": [
+            {
+              "createTable": {
+                "columns": [
+                  {
+                    "column": {
+                      "name": "role_uuid",
+                      "type": "UUID",
+                      "constraints":{
+                        "nullable":false,
+                        "foreignKeyName":"fk_role_uuid" ,
+                        "references": "rbac.roles(id)"
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "policy_uuid",
+                      "type": "UUID",
+                      "constraints":{
+                        "nullable":false,
+                        "foreignKeyName":"fk_policy_uuid" ,
+                        "references": "rbac.policies(id)"
+                      }
+                      
+                    }
+                  },
+                 
+                  
+                  {
+                    "column": {
+                      "name": "created_by",
+                      "type": "varchar(255)",
+                      "defaultValueComputed": "current_user",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "updated_by",
+                      "type": "varchar(255)",
+                      "defaultValueComputed": "current_user",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "created_at",
+                      "type": "TIMESTAMP WITHOUT TIME ZONE",
+                      "defaultValueComputed":"current_timestamp"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "updated_at",
+                      "type": "TIMESTAMP WITHOUT TIME ZONE",
+                      "defaultValueComputed":"current_timestamp"
+                    }
+                  }
+                ],
+                "schemaName": "rbac",
+                "tableName": "role_policies"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "changeSet": {
+            "id": "create_master_roles",
+            "author": "ankitam",
+            "changes": [
+              {
+                "sql": {
+                  "sql": "INSERT INTO rbac.roles(name,short_code) VALUES('app_viewer','ap_v'),('app_admin','ap_ad'),('app_account_administartor','ap_ac_ad'),('super_admin','sup_ad');"
+                }
+              }
+            ]
+          }
+      },
+      {
+        "changeSet": {
+            "id": "create_master_policies",
+            "author": "ankitam",
+            "changes": [
+              {
+                "sql": {
+                  "sql": "INSERT INTO rbac.policies(name,claim) VALUES('app_administartor',ARRAY['get_my_apps','get_app','edit_app']),('app_viewer',ARRAY['get_my_apps','get_app']),('global_account_administartor','*'),('app_account_administartor',ARRAY['create_account','delete_account','edit_account','create_role','edit_role','delete_role','create_policy','edit_policy','delete_policy']);"
+                }
+              }
+            ]
+          }
+      }
+     
+    ]
+  }

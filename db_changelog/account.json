@@ -1,0 +1,233 @@
+{
+    "databaseChangeLog": [
+      {
+        "changeSet": {
+          "id": "create_schema_account",
+          "author": "ankitam",
+          "changes": [
+            {
+              "sql": {
+                "sql": "CREATE SCHEMA account"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "changeSet": {
+            "id": "create_users_and_permissions_on_schemas",
+            "author": "ankitam",
+            "changes": [
+                {
+                    "sqlFile": {
+                        "splitStatements": true,
+                        "path": "changelog/account_schema_permissions.sql",
+                        "stripComments": true
+                    }
+                }
+            ]
+        }
+      },
+      {
+        "changeSet": {
+          "id": "create_table_accounts",
+          "author": "ankitam",
+          "changes": [
+            {
+              "createTable": {
+                "columns": [
+                  {
+                    "column": {
+                      "name": "id",
+                      "type": "UUID",
+                      "defaultValueComputed": "uuid_generate_v4()",
+                      "constraints":{
+                        "primaryKey":true
+                      }
+                      
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "name",
+                      "type": "varchar(255)",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "parent_account_id",
+                      "type": "varchar(255)",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "category",
+                      "type": "varchar(255)",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "type",
+                      "type": "varchar(255)",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "adress_line_1",
+                      "type": "varchar(255)",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "adress_line_2",
+                      "type": "varchar(255)",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "country",
+                      "type": "varchar(255)"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "state",
+                      "type": "varchar(255)"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "city",
+                      "type": "varchar(255)"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "zip_code",
+                      "type": "varchar(255)"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "contact_name",
+                      "type": "varchar(255)",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "contact_email",
+                      "type": "varchar(255)",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "contact_phone",
+                      "type": "varchar(255)",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "logo_uri",
+                      "type": "varchar(255)"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "is_active",
+                      "type": "boolean",
+                      "defaultValueBoolean":"false"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "is_self_registration_allowed",
+                      "type": "boolean",
+                      "defaultValueBoolean":"false"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "created_by",
+                      "type": "varchar(255)",
+                      "defaultValueComputed": "current_user",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "updated_by",
+                      "type": "varchar(255)",
+                      "defaultValueComputed": "current_user",
+                      "constraints": {
+                          "nullable": false
+                      }
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "created_at",
+                      "type": "TIMESTAMP WITHOUT TIME ZONE",
+                      "defaultValueComputed":"current_timestamp"
+                    }
+                  },
+                  {
+                    "column": {
+                      "name": "updated_at",
+                      "type": "TIMESTAMP WITHOUT TIME ZONE",
+                      "defaultValueComputed":"current_timestamp"
+                    }
+                  }
+                ],
+                "schemaName": "account",
+                "tableName": "accounts"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "changeSet": {
+            "id": "insert_master_accounts",
+            "author": "ngoswami",
+            "changes": [
+                {
+                    "sqlFile": {
+                        "splitStatements": true,
+                        "path": "changelog/insert_master_accounts.sql",
+                        "stripComments": true
+                    }
+                }
+            ]
+        }
+    }
+    ]
+  }

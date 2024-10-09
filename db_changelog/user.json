@@ -1,0 +1,277 @@
+{
+    "databaseChangeLog": [
+        {
+            "changeSet": {
+                "id": "create_schema_users",
+                "author": "ankitam",
+                "changes": [
+                    {
+                        "sql": {
+                            "sql": "CREATE SCHEMA users"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "changeSet": {
+                "id": "create_user_permissions",
+                "author": "ankitam",
+                "changes": [
+                    {
+                        "sqlFile": {
+                            "splitStatements": true,
+                            "path": "changelog/user_schema_permissions.sql",
+                            "stripComments": true
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "changeSet": {
+                "id": "create_table_ad_users",
+                "author": "ankitam",
+                "changes": [
+                    {
+                        "createTable": {
+                            "columns": [
+                                {
+                                    "column": {
+                                        "name": "id",
+                                        "type": "UUID",
+                                        "defaultValueComputed": "uuid_generate_v4()",
+                                        "constraints": {
+                                            "nullable":false,
+                                            "primaryKey": true
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "first_name",
+                                        "type": "varchar(255)",
+                                        "constraints": {
+                                            "nullable": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "middle_name",
+                                        "type": "varchar(255)",
+                                        "constraints": {
+                                            "nullable": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "last_name",
+                                        "type": "varchar(255)",
+                                        "constraints": {
+                                            "nullable": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "contact_number",
+                                        "type": "varchar(255)",
+                                        "constraints": {
+                                            "nullable": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "email_address",
+                                        "type": "varchar(255)",
+                                        "constraints": {
+                                            "nullable": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "account_uuid",
+                                        "type": "UUID",
+                                        "constraints": {
+                                            "nullable": false,
+                                            "foreignKeyName": "fk_account_uuid",
+                                            "references": "account.accounts(id)"
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "is_user_created_in_sso",
+                                        "type": "boolean",
+                                        "defaultValueBoolean": "false"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "user_sso_id",
+                                        "type": "varchar(255)"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "is_active",
+                                        "type": "boolean",
+                                        "defaultValueBoolean": "false"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "last_login",
+                                        "type": "TIMESTAMP WITHOUT TIME ZONE"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "is_email_verified",
+                                        "type": "boolean",
+                                        "defaultValueBoolean": "false"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "is_mobile_verified",
+                                        "type": "boolean",
+                                        "defaultValueBoolean": "false"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "created_by",
+                                        "type": "varchar(255)",
+                                        "defaultValueComputed": "current_user",
+                                        "constraints": {
+                                            "nullable": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "updated_by",
+                                        "type": "varchar(255)",
+                                        "defaultValueComputed": "current_user",
+                                        "constraints": {
+                                            "nullable": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "created_at",
+                                        "type": "TIMESTAMP WITHOUT TIME ZONE",
+                                        "defaultValueComputed": "current_timestamp"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "updated_at",
+                                        "type": "TIMESTAMP WITHOUT TIME ZONE",
+                                        "defaultValueComputed": "current_timestamp"
+                                    }
+                                }
+                            ],
+                            "schemaName": "users",
+                            "tableName": "ad_users"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "changeSet": {
+                "id": "create_table_app_users",
+                "author": "ankitam",
+                "changes": [
+                    {
+                        "createTable": {
+                            "columns": [
+                                {
+                                    "column": {
+                                        "name": "id",
+                                        "type": "UUID",
+                                        "defaultValueComputed": "uuid_generate_v4()"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "app_uuid",
+                                        "type": "UUID",
+                                        "constraints":{
+                                            "foreignKeyName":"fk_app_uuid" ,
+                                            "references": "application.applications(id)"
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "user_uuid",
+                                        "type": "UUID",
+                                        "constraints":{
+                                            "foreignKeyName":"fk_user_uuid" ,
+                                            "references": "users.ad_users(id)"
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "user_role_uuid",
+                                        "type": "UUID",
+                                        "constraints":{
+                                            "foreignKeyName":"fk_user_role_uuid" ,
+                                            "references": "rbac.roles(id)"
+                                        }
+                                    }
+                                },
+                               
+                                {
+                                    "column": {
+                                        "name": "created_by",
+                                        "type": "varchar(255)",
+                                        "defaultValueComputed": "current_user",
+                                        "constraints": {
+                                            "nullable": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "updated_by",
+                                        "type": "varchar(255)",
+                                        "defaultValueComputed": "current_user",
+                                        "constraints": {
+                                            "nullable": false
+                                        }
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "created_at",
+                                        "type": "TIMESTAMP WITHOUT TIME ZONE",
+                                        "defaultValueComputed": "current_timestamp"
+                                    }
+                                },
+                                {
+                                    "column": {
+                                        "name": "updated_at",
+                                        "type": "TIMESTAMP WITHOUT TIME ZONE",
+                                        "defaultValueComputed": "current_timestamp"
+                                    }
+                                }
+                            ],
+                            "schemaName": "application",
+                            "tableName": "app_users"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}

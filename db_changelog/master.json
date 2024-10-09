@@ -1,0 +1,43 @@
+{
+    "databaseChangeLog": [
+      {
+        "changeSet": {
+          "id": "enable_uuid_extension",
+          "author": "ngoswami",
+          "changes": [
+            {
+              "sql": {
+                "sql": "CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\""
+              }
+            }
+          ]
+        }
+      },
+      {
+        "changeSet": {
+          "id": "create_reader_user",
+          "author": "ngoswami",
+          "changes": [
+            {
+              "sql": {
+                "sql": "CREATE USER xlr8reader WITH PASSWORD 'your_password';"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "changeSet": {
+          "id": "create_writer_user",
+          "author": "ngoswami",
+          "changes": [
+            {
+              "sql": {
+                "sql": "CREATE USER xlr8writer WITH PASSWORD 'your_password';"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }

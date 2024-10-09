@@ -1,0 +1,47 @@
+services:
+  postgres:
+    network_mode: "host"
+    image: "postgres:16.3-alpine"
+    ports:
+      - "5432:5432"
+    env_file: .env
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  liquibase:
+    network_mode: "host"
+    env_file: .env
+    depends_on:
+      - postgres
+    image: "liquibase/liquibase"
+    volumes:
+      - "/home/krupal/FastAPI_20_Aug/Gen_ai_v2/db_changelog:/liquibase/changelog"
+    command: update --changelog-file=changelog/db.json --url="jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}" --username=${POSTGRES_USER} --password=${POSTGRES_PASSWORD}
+  apis:
+    network_mode: "host"
+    image: "python:3.12.4-alpine"
+    ports:
+      - "8000:8000"
+    env_file: .env
+    volumes:
+      - "/home/krupal/FastAPI_20_Aug/Gen_ai_v2:/fast_api_poc"
+    command: sh -c "
+      python -m venv fapi_env
+      && source fapi_env/bin/activate
+      && cd fast_api_poc
+      && pip install -r requirements.txt
+      && python main.py"
+  tests:
+    network_mode: "host"
+    image: "python:3.12.4-alpine"
+    env_file: .env
+    volumes:
+      - "/home/krupal/FastAPI_20_Aug/Gen_ai_v2:/fast_api_poc"
+    command: sh -c "
+      python -m venv fapi_env
+      && source fapi_env/bin/activate
+      && cd fast_api_poc
+      && pip install -r requirements.txt
+      && cd tests
+      && pytest
+      && coverage run --source=api -m pytest
+      && coverage report"
